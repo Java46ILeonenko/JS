@@ -1,22 +1,40 @@
-function encode(number,codingString){
-    let result= "";
-    if(duplicate(codingString)==true){
-        console.log(`ERROR: "Duplicate symbols"`);
+console.log("1:");
+const arHw = [13,28,4,15,25,-10,40,17,27];
+const sorted = arHw.slice();
+sorted.sort((a,b)=> (a%2)-(b%2));
+sorted.sort(function(a,b){
+    if((a%2==0) && (b%2==0)){
+        return a-b;
     }
-    else{
-        do {
-            const digit= Math.trunc(number%codingString.length);
-            const symbol= getS(digit,codingString);
-            result= symbol+result;
-            number= Math.trunc(number/codingString.length);
-        }while(number>=1);
-        return result;
+    else if((a%2!=0) && (b%2!=0)){
+        return b-a;
     }
-    function getS(digit,codingString) {
-        return "" + codingString[digit];
+})
+console.log(`Unsorted : [${arHw.toString()}]`);
+console.log(`Sorted   : [${sorted.toString()}]`);
+
+console.log("2:");
+const source = [[1,2],[3,4],[5,6],[7,8]]; 
+const resMatrix = matrixTransp(source);
+displayMatrix(resMatrix);
+function matrixTransp(matrix) {
+const result = [];
+    for (let i=0; i < matrix.length; i++) {
+        for (let j = 0; j < matrix[i].length; j++) {
+            if (!result[j]) {
+                 result[j] = [];
+            };
+            result[j][i] = matrix[i][j];
+        }
+    }
+    return result;
+}
+function displayMatrix(matrix) {
+    for (let i=0; i<matrix.length; i++) {
+        let row = '';
+        for (let j=0; j<matrix[i].length; j++){
+            row = row + matrix[i][j] + ' ';
+        }
+        console.log(row);
     }
 }
-function duplicate(codingString){
-    return new Set(codingString).size!=codingString.length;
-}
-console.log(encode(346464634,`+=-90`));
