@@ -1,40 +1,30 @@
 console.log("1:");
-const arHw = [13,28,4,15,25,-10,40,17,27];
-const sorted = arHw.slice();
-sorted.sort((a,b)=> (a%2)-(b%2));
-sorted.sort(function(a,b){
-    if((a%2==0) && (b%2==0)){
-        return a-b;
+
+const arr1 = [1, 4, 9];
+let myForEach = function(array, callback) {
+    for (let i = 0; i < array.length; i++) {
+      callback(array[i], i, array);
     }
-    else if((a%2!=0) && (b%2!=0)){
-        return b-a;
-    }
-})
-console.log(`Unsorted : [${arHw.toString()}]`);
-console.log(`Sorted   : [${sorted.toString()}]`);
+};
+myForEach(arr1, (n, i, a) => {
+    let newVal = Math.pow(n, i);
+    console.log("Value in the power of it's index "+ newVal);
+});
 
 console.log("2:");
-const source = [[1,2],[3,4],[5,6],[7,8]]; 
-const resMatrix = matrixTransp(source);
-displayMatrix(resMatrix);
-function matrixTransp(matrix) {
-const result = [];
-    for (let i=0; i < matrix.length; i++) {
-        for (let j = 0; j < matrix[i].length; j++) {
-            if (!result[j]) {
-                 result[j] = [];
-            };
-            result[j][i] = matrix[i][j];
-        }
+
+let myMap = function(array, callback) {
+    let newArr = [];
+    for (let i = 0; i < array.length; i++) {
+      newArr.push(callback(array[i], i, array));
     }
-    return result;
-}
-function displayMatrix(matrix) {
-    for (let i=0; i<matrix.length; i++) {
-        let row = '';
-        for (let j=0; j<matrix[i].length; j++){
-            row = row + matrix[i][j] + ' ';
-        }
-        console.log(row);
-    }
-}
+    return newArr;
+};
+
+const arrEx2 = [8,5,3];
+
+const checkArray = myMap(arrEx2, (n, i, a) => n * 3);
+
+console.log(`    Array: ` + `[` + arrEx2 + `]`);
+console.log(`New Array: ` + `[` + checkArray + `]`);
+
