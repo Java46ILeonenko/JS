@@ -1,46 +1,85 @@
-console.log(`\t1:`);
-
-function Deferred(){
-    this.array0 = [];
-    this.result;
+class Person {
+  #id;
+  #name;
+  constructor(id, name) {
+    this.#id = id;
+    this.#name = name;
   }
-  Deferred.prototype.then = function(e) {
-    this.array0.push(e);
+  getId() {
+    return this.#id;
   }
-  Deferred.prototype.resolve = function(value) {
-    this.result = value;
-    for (let i = 0; i < this.array0.length; i++) {
-        this.result = this.array0[i](this.result);
-    }
+  getName() {
+    return this.#name
   }
+  toString() {
+    return `id: ${this.#id}; 
+            name: ${this.#name};`
+  }
+}
+class Employee extends Person {
+  #salary;
+  constructor(id, name, salary) {
+    super(id, name);
+    this.#salary = salary;
+  }
+  computeSalary() {
+    return this.#salary
+  }
+  toString() {
+    return super.toString() + ` salary: ${this.computeSalary()}`
+  }
+}
+class Child extends Person {
+  #kindergarten
+  constructor(id, name, kindergarten) {
 
-  const d = new Deferred();
-  d.then(function(result){ console.log('1', result); return 'a'; });
-  d.then(function(result){ console.log('2', result); return 'b'; });
-  d.then(function(result){ console.log('3', result); return 'c'; });
-  d.resolve('Hello');
+    super(id, name);
+    this.#kindergarten = kindergarten   
+  }
+  getKindergarten() {
+    return this.#kindergarten;
+  }
+  toString() {
+    return `${super.toString()} kindergarten: ${this.#kindergarten}`
+  }
+}
+class WageEmployee extends Employee {
+  #hours
+  #wage
+  constructor(id, name, salary, hours, wage) {
+    super(id, name, salary)
+    this.#hours = hours;
+    this.#wage = wage;
+  }
+  computeSalary() {
+    return super.computeSalary() + this.#hours * this.#wage
+  }
+}
+const persons = [
+  new Child(100, 'Olya', 'Shalom'),
+  new Child(101, 'Serega', "Boker"),
+  new Child(102, 'Kolya', 'Shalom'),
+  new Employee(103, 'Vasya', 1000),
+  new WageEmployee(104, 'Tolya', 1000, 10, 100)
+]
+console.log(`(1)\n`);
+function countOfPersonType(persons, type) {
+  return persons.filter(e => e.constructor.name === type).length
+}
+console.log(`Child : [${countOfPersonType(persons, `Child`)}]`);
+console.log(`Employee : [${countOfPersonType(persons, `Employee`)}]`);
+console.log(`WageEmployee : [${countOfPersonType(persons, `WageEmployee`)}]`);
 
-console.log(`\t2:`);
+console.log(`\n(2)\n`);
+function computeSalaryBudget(persons) {
+  return persons.filter(e => e.computeSalary !== undefined).reduce((sum, cur) => sum = sum + cur.computeSalary(), 0)
+}
+console.log(`Salary: [${computeSalaryBudget(persons)}]`);
 
-function MyArray(value){
-    this.array1 = []; 
-    this.value = value;
+console.log(`\n(3)\n`);
+function countChildrenGindergarten(persons, kindergarten){
+  return persons.filter(e => e.getKindergarten !== undefined).filter(n => n.getKindergarten() === kindergarten).length
 }
-MyArray.prototype.get = function(i) {
-    return this.array1[i]? this.array1[i] : this.value;
-}
-MyArray.prototype.set = function(i,v) {
-    this.array1[i] = v;
-}
-MyArray.prototype.setValue = function (v) {
-    this.value = v;
-    this.array1 = this.array1.map(n => n = v);
-}
-const myArray = new MyArray(10);
-console.log(myArray.get(100));
-myArray.set(100, 500);
-console.log(myArray.get(200));
-console.log(myArray.get(100));
-myArray.setValue(300);
-console.log(myArray.get(100));
-console.log(myArray.get(200));
+console.log(`Children: [${countChildrenGindergarten(persons, `Boker`)}]`);
+
+
